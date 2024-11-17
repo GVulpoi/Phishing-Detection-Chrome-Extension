@@ -1,0 +1,1 @@
+console.log("Backround js is working!");
