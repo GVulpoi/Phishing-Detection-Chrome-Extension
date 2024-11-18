@@ -7,7 +7,7 @@
 	"action":
 	{
 		"default_popup": "./Popup/popup.html",
-		"default_icon": "./Resources/icon.png"
+		"default_icon": "./Resources/icon-32.png"
 	},
 	"content_scripts" :
 	[
