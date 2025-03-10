@@ -1,19 +1,22 @@
 {
 	"manifest_version": 3,
 	"name": "Phishing Detector",
-	"description": "Detects phising activities in websites.",
+	"description": "Detects phishing activities in websites.",
 	"version": "1.0",
-	"permissions" : ["scripting", "activeTab"],
-	"action":
-	{
+	"permissions": ["scripting", "activeTab", "storage", "alarms"],
+	"host_permissions": ["<all_urls>"],
+	"action": {
 		"default_popup": "./Popup/popup.html",
 		"default_icon": "./Resources/icon-32.png"
 	},
-	"content_scripts" :
-	[
+	"content_scripts": [
 		{
-			"js" : ["./Scripts/retrieveScripts.js"],
-			"matches" : ["<all_urls>"]
+			"js": ["./Scripts/RetrieveScripts.js"],
+			"matches": ["<all_urls>"],
+			"run_at": "document_idle"
 		}
-	]
+	],
+	"background": {
+		"service_worker": "./Scripts/ServiceWorker.js"
+	}
 }

@@ -1,41 +1,58 @@
 //Logistics for fetching scripts and url's of scripts files
-const scriptName = Array.from(document.querySelectorAll('script'));
 
-const inlineScripts = scriptName
-								.filter(script => !script.src)
-								.map(script => script.textContent);
-
-const externalScripts = scriptName
-								.filter(script => script.src)
-								.map(script => script.src);
-
-console.log("Inline Scripts : ", inlineScripts);
-console.log("External Scripts : ", externalScripts);
-
+//Function that fetches the content from all urls of js content
 async function copyCodeFromFile(url)
 {
-	fetch(url)
-			try
-			{
-				const response = await fetch(url);
+	try
+	{
+		const response = await fetch(url);
+		
+		if (!response.ok)
+		{
+			throw new Error(`The response from url wasn't recieved ${response.statusText}`);
+		}
 
-				if (!response.ok)
-				{
-					throw new Error(`The response from url wasn't recieved ${response.statusText}`);
-				}
+		//console.log(`Script from url : ${url}`, data);
+		return await response.text();
 
-				const data = await response.text();
-				console.log(`Script from url : ${url}`, data);
-				return data;
+	}
+	catch(err)
+	{
+		console.log(`Fetch operation has failed for url ${url}`, err);
+		return "Error script!";
 
-			}
-			catch(err)
-			{
-				console.error(`Fetch operation has failed for url ${url}`, err);
-			}
+	}
 }
 
-externalScripts.forEach(	obj =>
-							{
-								copyCodeFromFile(obj);
-							});
+//Function that returns the content from all inline and external scripts
+async function retrieveExternalInternal()
+{
+	const scriptName = Array.from(document.querySelectorAll('script'));
+
+	const inlineScripts = scriptName
+									.filter(script => !script.src)
+									.map(script => script.textContent);
+
+	const externalScriptsUrls = scriptName
+									.filter(script => script.src)
+									.map(script => script.src);
+
+	externalScriptsContent = await Promise.all(externalScriptsUrls.map(copyCodeFromFile));
+
+	return {inlineScripts, externalScriptsContent};
+}
+
+//Function that cancatenates all the scripts and send them to service worker via message
+async function RetrieveScrips()
+{
+	const {inlineScripts, externalScriptsContent} = await retrieveExternalInternal();
+	const allScripts =  inlineScripts.concat(externalScriptsContent);
+
+	chrome.runtime.sendMessage({
+		action : "PROCESS_SCRIPTS",
+		allScripts
+	}
+	);
+}
+
+RetrieveScrips();
