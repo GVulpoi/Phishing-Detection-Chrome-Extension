@@ -3,7 +3,7 @@
 	"name": "Phishing Detector",
 	"description": "Detects phishing activities in websites.",
 	"version": "1.0",
-	"permissions": ["scripting", "activeTab", "storage", "alarms"],
+	"permissions": ["scripting", "activeTab", "storage", "alarms", "declarativeNetRequest"],
 	"host_permissions": ["<all_urls>"],
 	"action": {
 		"default_popup": "./Popup/popup.html",
@@ -18,5 +18,16 @@
 	],
 	"background": {
 		"service_worker": "./Scripts/ServiceWorker.js"
+	},
+	"declarative_net_request":
+	{
+		"rule_resources":
+		[
+			{
+				"id": "block-scripts",
+				"enabled": true,
+				"path": "rules.json"
+			}
+		]
 	}
 }
