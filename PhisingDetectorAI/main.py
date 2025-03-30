@@ -7,7 +7,23 @@ from urllib.parse import urlparse
 
 def extract_features(url):
     features = {}
-    parsed_url = urlparse(url)
+
+    try:
+        parsed_url = urlparse(url)
+    except Exception as e:
+        print("Error parsing URL:", url, e)
+
+        return {
+            'url_length': len(url),
+            'num_dots': url.count('.'),
+            'num_hyphens': url.count('-'),
+            'num_slashes': url.count('/'),
+            'num_digits': sum(c.isdigit() for c in url),
+            'num_subdomains': 0,
+            'https': 0,
+            'num_queries': 0
+        }
+
     features['url_length'] = len(url)
     features['num_dots'] = url.count('.')
     features['num_hyphens'] = url.count('-')
@@ -20,7 +36,7 @@ def extract_features(url):
 
 def load_dataset():
     data = pd.read_csv('train_data.csv')
-    a = data['url'].apply(lambda x: pd.Series(extract_features(x), print(x)))
+    a = data['url'].apply(lambda x: pd.Series(extract_features(x)))
     b = data['status']
     return a, b
 
@@ -33,7 +49,7 @@ print("Train Accuracy:", accuracy_score(y_test, y_pred))
 
 def load_dataset_test():
     data = pd.read_csv('test_data.csv')
-    a = data['url'].apply(lambda x: pd.Series(extract_features(x), print(x)))
+    a = data['url'].apply(lambda x: pd.Series(extract_features(x)))
     b = data['type']
     return a, b
 
@@ -42,16 +58,15 @@ def test(model=clf):
     a = 0
     f = 0
 
-    for url, clas in zip(x, y):
-        features = pd.Series(extract_features(url))
-        prediction = model.predict(features)
+    for charact, clas in zip(x, y):
+        prediction = model.predict(charact)
 
         if (clas == "legitimate" and prediction == 0) or (clas == "phising" and prediction == 1):
             a += 1
         else:
             f += 1
 
-    print("Test Accuracy", a / (a + f))
+        print("Test Accuracy", a / (a + f))
 
 
 test()

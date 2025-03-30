@@ -55,4 +55,6 @@ async function RetrieveScrips()
 	);
 }
 
+console.log("Retrieve Scripts working!");
+
 RetrieveScrips();

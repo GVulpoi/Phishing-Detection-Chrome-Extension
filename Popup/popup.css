@@ -1,0 +1,112 @@
+body {
+    width: 300px;
+    height: 250px;
+    display:grid;
+    grid-template-columns: 20px 1fr;
+    grid-template-rows: 1fr;
+    background: #3b3b3b;
+    font-family: Arial, Helvetica, sans-serif;
+    box-shadow: #303030;
+    border-radius: 10px;
+    border-color: #000;
+}
+
+h1 {
+    color: aliceblue;
+    text-align: center;
+    padding-left: 10px;
+}
+
+p {
+    color: #ccc;
+}
+
+.textP {
+    padding-left: 35px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: left;
+    gap: 10px;
+}
+
+.imageContainer img {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    padding: 10px;
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    gap: 10px;
+    border-style: solid;
+    border-width: 0.5px;
+    border-color: #ccc;
+    border-radius: 20px;
+}
+
+/* Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+/* Hide Default Checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 25px;
+}
+
+/* Slider Circle */
+.slider::before {
+    position: absolute;
+    content: "";
+    height: 19px;
+    width: 19px;
+    left: 0.5px;
+    bottom: 0.8px;
+    background-color: #1c1b1b;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+/* Toggle ON State */
+input:checked + .slider {
+    background-color: #4CAF50;
+}
+
+/* Move Circle to Right */
+input:checked + .slider::before {
+    transform: translateX(19px);
+}
+
+/* Status Text */
+#statusText {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #ccc;
+}

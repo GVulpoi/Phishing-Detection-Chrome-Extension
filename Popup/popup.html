@@ -1,5 +1,44 @@
-<html>
-	<body>
-		<h2> Phising Detector</h2>
-	</body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="popup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+	<title>Phising Detector</title>
+
+</head>
+<body>
+
+	<!-- Image -->
+	 <div class="imageContainer">
+		<img src="../Resources/icon-32.png" alt="Icon">
+	 </div>
+
+
+	<!-- Title -->
+	<div class="container">
+		<h1><i class="fa-solid fa-bolt"></i> Phising Detector</h1>
+
+		<p class="textP">"Phising Detector" is a chrome extension that use an Artificial Model to detect phising websites at runtime. The AI model is 
+			integrated in extension so you don't have to worry that your traffic is being tracked :) .
+		</p>
+    
+		<!-- Toggle extension on/off -->
+		<div class="content">
+		
+			<p id="statusText">Disable extension</p>
+           
+			<label class="switch">
+				<input type="checkbox" id="toggleSwitch">
+				<span class="slider"></span>
+			</label>
+		</div>
+    </div>
+
+
+	<!-- JavaScript file -->
+	<script src="popup.js"></script>
+</body>
 </html>
