@@ -1,11 +1,10 @@
-import joblib
 import pandas as pd
+import tensorflow as tf
+import tensorflowjs as tfjs
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+from sklearn.preprocessing import StandardScaler
 
 df = pd.read_csv("Phishing_Legitimate_full.csv")
-
 X = df.drop(["id", "CLASS_LABEL","EmbeddedBrandName",
              'ExtFavicon', 'PctNullSelfRedirectHyperlinks',
              'FrequentDomainNameMismatch', 'RightClickDisabled', 'PopUpWindow', 'SubmitInfoToEmail',
@@ -15,13 +14,17 @@ y = df["CLASS_LABEL"]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=48)
 
-model = RandomForestClassifier(n_estimators=60, random_state=48)
-model.fit(X_train, y_train)
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
 
-y_pred = model.predict(X_test)
+model = tf.keras.models.Sequential([
+    tf.keras.layers.Dense(64, activation='relu', input_shape=(X_train.shape[1],)),
+    tf.keras.layers.Dense(32, activation='relu'),
+    tf.keras.layers.Dense(1, activation='sigmoid')
+])
 
-print("Acuratețe:", accuracy_score(y_test, y_pred))
-print("\nMatricea de confuzie: ", confusion_matrix(y_test, y_pred))
-print("\nRaport clasificare: \n", classification_report(y_test, y_pred))
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+model.fit(X_train, y_train, epochs=10, batch_size=32, validation_data=(X_test, y_test))
 
-joblib.dump(model, 'phishing_detector.pkl')
+tfjs.converters.save_keras_model(model, "phishing_detector_tfjs")
