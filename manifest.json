@@ -3,7 +3,7 @@
 	"name": "Phishing Detector",
 	"description": "Detects phishing activities in websites.",
 	"version": "1.0",
-	"permissions": ["scripting", "activeTab", "storage", "alarms", "declarativeNetRequest", "management"],
+	"permissions": ["scripting", "activeTab", "storage", "alarms", "declarativeNetRequest", "management", "tabs"],
 	"host_permissions": ["<all_urls>"],
 	"action": {
 		"default_popup": "./Popup/popup.html",
@@ -12,22 +12,18 @@
 	"content_scripts": [
 		{
 			"matches": ["<all_urls>"],
-			"js": ["Scripts/RetrieveScripts.js"],
-			"run_at": "document_start"
+			"js": ["Scripts/ExtractFeatures.js", "Scripts/Model.js"],
+			"run_at": "document_idle"
 		}
 	],
 	"background": {
-		"service_worker": "./Scripts/ServiceWorker.js"
+		"service_worker": "Scripts/ServiceWorker.js",
+		"type": "module"
 	},
-	"declarative_net_request":
+	"web_accessible_resources": [
 	{
-		"rule_resources":
-		[
-			{
-				"id": "block-scripts",
-				"enabled": true,
-				"path": "rules.json"
-			}
-		]
+		"resources": ["Resources/lib/tf.min.js"],
+		"matches": ["<all_urls>"]
 	}
+]
 }
