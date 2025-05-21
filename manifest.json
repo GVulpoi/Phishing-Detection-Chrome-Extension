@@ -13,16 +13,17 @@
 		{
 			"matches": ["<all_urls>"],
 			"js": ["Scripts/ExtractFeatures.js", "Scripts/Model.js"],
+			"type": "module",
 			"run_at": "document_idle"
 		}
 	],
 	"background": {
-		"service_worker": "Scripts/ServiceWorker.js",
+		"service_worker": "ServiceWorker.js",
 		"type": "module"
 	},
 	"web_accessible_resources": [
 	{
-		"resources": ["Resources/lib/tf.min.js"],
+		"resources": ["Resources/lib/tf.min.js", "Model/model.json", "Model/group1-shard1of1.bin"],
 		"matches": ["<all_urls>"]
 	}
 ]

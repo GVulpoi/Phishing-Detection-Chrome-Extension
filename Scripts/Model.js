@@ -1,18 +1,6 @@
-//model loader
-let model = null;
-
-async function loadModel()
-{
-	if(!model)
-	{
-		model = await tf.loadLayersModel(chrome.runtime.getUrl('Model/model.json'));
-		console.log("Model loaded!");
-	}
-}
-
 async function predict(features)
 {
-	await loadModel();
+	const model = await tf.loadLayersModel(chrome.runtime.getURL('../Model/model.json'));
 
 	if(model)
 	{
@@ -29,11 +17,3 @@ async function predict(features)
 
 	return null;
 }
-
-chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
-	if (msg.action === "RUN_PREDICTION") {
-		const result = await predict(msg.features);
-		sendResponse({ prediction: result });
-		return true;
-	}
-});
