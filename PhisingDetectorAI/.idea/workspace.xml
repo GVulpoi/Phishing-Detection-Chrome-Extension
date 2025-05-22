@@ -5,9 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2c7a1048-1c89-4f22-b44f-6a8a7de55d6e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/group1-shard1of1.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/model.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Scripts/ServiceWorker.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Scripts/ServiceWorker.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/group1-shard1of1.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/group1-shard1of1.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/model.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Model/model.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Model/tf.fesm.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhishingDetector.py" beforeDir="false" afterPath="$PROJECT_DIR$/PhishingDetector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PredictUrl.py" beforeDir="false" afterPath="$PROJECT_DIR$/PredictUrl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Resources/lib/tf.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Resources/lib/tf.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ServiceWorker.js" beforeDir="false" afterPath="$PROJECT_DIR$/../ServiceWorker.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

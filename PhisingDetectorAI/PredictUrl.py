@@ -191,5 +191,6 @@ def predict_url(url):
 
 if __name__ == "__main__":
     test_url = input("URL : ")
+    print(extract_features(test_url))
     result = predict_url(test_url)
     print("Rezultat:", "Phishing" if result == 1 else "Legitim")

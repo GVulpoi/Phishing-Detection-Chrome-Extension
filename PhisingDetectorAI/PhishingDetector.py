@@ -3,8 +3,9 @@ import tensorflow as tf
 import tensorflowjs as tfjs
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-
-df = pd.read_csv("Phishing_Legitimate_full.csv")
+from google.colab import drive
+drive.mount('/content/drive')
+df = pd.read_csv("/Phishing_Legitimate_full.csv")
 X = df.drop(["id", "CLASS_LABEL","EmbeddedBrandName",
              'ExtFavicon', 'PctNullSelfRedirectHyperlinks',
              'FrequentDomainNameMismatch', 'RightClickDisabled', 'PopUpWindow', 'SubmitInfoToEmail',
@@ -19,7 +20,8 @@ X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
 model = tf.keras.models.Sequential([
-    tf.keras.layers.Dense(64, activation='relu', input_shape=(X_train.shape[1],)),
+    tf.keras.layers.InputLayer(batch_input_shape=(None, 33)),
+    tf.keras.layers.Dense(64, activation='relu'),
     tf.keras.layers.Dense(32, activation='relu'),
     tf.keras.layers.Dense(1, activation='sigmoid')
 ])
@@ -27,4 +29,20 @@ model = tf.keras.models.Sequential([
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 model.fit(X_train, y_train, epochs=10, batch_size=32, validation_data=(X_test, y_test))
 
-tfjs.converters.save_keras_model(model, "phishing_detector_tfjs")
+model.save("model.h5")
+
+#convert to tfjs
+modelaux = tf.keras.models.load_model('/content/model.h5')
+
+tfjs.converters.save_keras_model(modelaux, 'tfjs_model')
+
+#salvam mean si scale pentru normalizare
+import json
+
+params = {
+    "mean": scaler.mean_.tolist(),
+    "scale": scaler.scale_.tolist()
+}
+
+with open("scaler_params.json", "w") as f:
+    json.dump(params, f)

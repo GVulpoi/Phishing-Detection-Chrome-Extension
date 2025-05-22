@@ -134,7 +134,7 @@ function detectFakeLinkStatusBar(links)
 {
 	return [...links].some(links =>
 	{
-		const mouseOver = link.getAttribute('onmouseover') || '';
+		const mouseOver = links.getAttribute('onmouseover') || '';
 		return mouseOver.includes('window.status') || mouseOver.includes('status=');
 	}) ? 1 : 0;
 }
@@ -153,7 +153,7 @@ function detectExtFormAction(forms, domain)
 	return [...forms].some(form =>
 	{
 		const actions = form.getAttribute('action') || '';
-		return action && action.startsWith('http') && !action.includes(domain); 
+		return actions && actions.startsWith('http') && !actions.includes(domain); 
 	}) ? 1 : 0;
 }
 
