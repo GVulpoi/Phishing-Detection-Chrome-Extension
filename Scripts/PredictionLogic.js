@@ -235,7 +235,7 @@ async function main()
 
 	if (features)
 	{
-		chrome.runtime.sendMessage({ action: "FEATURES_EXTRACTED", content: features}, (response) => 
+		chrome.runtime.sendMessage({ action: "FEATURES_EXTRACTED", content: features}, function (response)
 		{
 			if (chrome.runtime.lastError)
 			{
@@ -244,9 +244,57 @@ async function main()
 			else
 			{
 			}
+			if(response && response.result)
+				{
+					showBanner(response.result);
+				}
+				else{console.log("Response not recieved");}
 		});
 	}
-
 }
 
 main();
+
+function showBanner(pred)
+{
+	if(document.getElementById("phishingBanner")) return;
+
+	const banner = document.createElement("div");
+	banner.id = "phishingBanner";
+	banner.innerText = "Acest site este un site de phishing!";
+
+	Object.assign(banner.style, 
+		{
+			position : "fixed",
+			top: "0",
+			left: "0",
+			width: "100%",
+			padding: "12px",
+			backgroundColor:"#c62828",
+			color: "white",
+			fontWeight: "bold",
+			fontSize: "16px",
+			textAlign: "center",
+			zIndex: "9999",
+			boxShadow: "0px 2px 10px rgba(0,0,0,0.3)",
+			fontFamily: "Arial, sans-serif"
+		}
+	);
+
+	const closeBtn = document.createElement("span");
+	closeBtn.innerText = "✕";
+
+	Object.assign(closeBtn.style,
+		{
+			position: "absolute",
+			right: "15px",
+			cursor: "pointer",
+			fontSize: "18px"
+		}
+	);
+
+	closeBtn.addEventListener("click", () => banner.remove());
+	banner.appendChild(closeBtn);
+
+	document.body.appendChild(banner);
+}

@@ -1,47 +1,48 @@
-console.log("Popup lodaded!");
-const toggleSwitch = document.getElementById("toggleSwitch");
+let isDisabled = false;
 
-
-chrome.storage.local.get(["isDisabled"], function(result)
+document.addEventListener("DOMContentLoaded", function () 
 {
-	const isEnabled = result.isDisabled || false;
-	toggleSwitch.checked = isEnabled; 
-}
-);
+	console.log("Popup loaded!");
 
-toggleSwitch.addEventListener('change', function ()
-{
-	const isDisabled = !toggleSwitch.checked;
+	const toggleSwitch = document.getElementById("toggleSwitch");
 
-	if (!isDisabled)
+	chrome.runtime.sendMessage({ action: "GET_EXTENSION_STATE" }, function (response) {
+		isDisabled = response.isDisabled;
+		toggleSwitch.checked = isDisabled;
+		handleToggleAnimation();
+	});
+
+	toggleSwitch.addEventListener('change', function ()
 	{
-		disableExtension(!isDisabled);
-	}else
-	{
-		enableExtension(!isDisabled);
-	}
+		if (!isDisabled)
+		{
+			disableExtension();
+		}else
+		{
+			enableExtension();
+		}
 
-});
+	});
 
-function disableExtension(isDisabled)
-{
-	chrome.storage.local.set({ isDisabled: true }, function () 
+	function disableExtension()
 	{
+		isDisabled = true;
 		chrome.runtime.sendMessage({ action: "DISABLE_EXTENSION" });
 		handleToggleAnimation(isDisabled);
-	});
-}
 
-function enableExtension(isDisabled)
-{
-	chrome.storage.local.set({ isDisabled: false }, function () 
+	}
+
+	function enableExtension()
 	{
+		isDisabled = false;
 		chrome.runtime.sendMessage({ action: "ENABLE_EXTENSION" });
-		handleToggleAnimation(isDisabled);
-	});
-}
+		handleToggleAnimation();
 
-function handleToggleAnimation(isEnabled) {
-	const slider = toggleSwitch.nextElementSibling;
-	slider.style.backgroundColor = isEnabled ? "#4CAF50" : "#ccc";
-}
+	}
+
+	function handleToggleAnimation() 
+	{
+		const slider = toggleSwitch.nextElementSibling;
+		slider.style.backgroundColor = isDisabled ? "#4CAF50" : "#ccc";
+	}
+});

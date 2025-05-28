@@ -1,4 +1,4 @@
-import * as tf from "./Resources/lib/tf.fesm.js";
+import * as tf from "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.fesm.js";
 
 //running prediction
 async function predict(features)
@@ -46,7 +46,7 @@ async function predict(features)
 	const scale = [1.3571734413847039, 0.769877222354318, 1.8767763418958585, 33.30006692842373, 3.103307910017148, 0.5575266809758973, 0.015809411753762374, 0.11487431991093569, 1.100077156384951, 0.6607775249658542, 1.3115715525658522, 1.1258423513085658, 0.04993746088859544, 9.670678420326828, 0.10546770832818923, 0.49926369222586175, 0.12927103310486848, 0.15109139411296724, 0.49486134421674116, 1.0, 8.339696748645899, 24.72867918025546, 24.11804419931268, 0.027375856150995536, 0.3691337833360691, 0.34344957402401205, 0.3873303993405749, 0.3639185820688468, 0.43337294490427064, 0.301989652140599, 0.23231968814545184, 0.07053367989832943, 0.17466467874186814];
 	const normalisedFeatures = featuresArray.map((v, i) => (v - mean[i]) / scale[i])
 
-	console.log(normalisedFeatures);
+	//console.log(normalisedFeatures);
 
 	if(model)
 	{
@@ -56,7 +56,7 @@ async function predict(features)
 		const prediction = model.predict(inputTensor);
 
 		const result = await prediction.data();
-		console.log(result[0].toFixed(5));
+		//console.log(result[0].toFixed(5));
 		return (result[0] > 0.995) ? 1 : 0;
 	}
 	else
@@ -81,6 +81,28 @@ chrome.runtime.onInstalled.addListener(() => {
 //Managing all the messages
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) =>
 {
+	//Messages for popup
+	if(message.action === "GET_EXTENSION_STATE")
+	{
+		sendResponse({ isDisabled });
+		return;
+	}
+
+	if(message.action === "DISABLE_EXTENSION")
+	{
+		isDisabled = true;
+		console.log("Extension disabled!");
+		return;
+	}
+
+	if(message.action === "ENABLE_EXTENSION")
+	{
+		isDisabled = false;
+		console.log("Extension enabled!");
+		return;
+	}
+
+	//Managing extension logistics messages + default case unknown action
 	if(!isDisabled)
 	{
 		if (!message.action)
@@ -99,8 +121,9 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) =>
 
 			case "FEATURES_EXTRACTED":
 				const pred = await predict(message.content);
-				console.log(pred);
-				return;
+				console.log(pred ? "This site was evaluated as phishing!" : "This site was evaluated as non-phishing!");
+				sendResponse({result: pred});
+				return true;
 
 			default:
 				console.log("Recieved message with unknown action!");
