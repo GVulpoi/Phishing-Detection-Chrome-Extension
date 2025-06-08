@@ -241,21 +241,21 @@ async function main()
 			{
 				console.log("Error sending message:", chrome.runtime.lastError);
 			}
+			if(response && response.result)
+			{
+				showBanner();
+			}
 			else
 			{
+				console.log("Response not recieved");
 			}
-			if(response && response.result)
-				{
-					showBanner(response.result);
-				}
-				else{console.log("Response not recieved");}
 		});
 	}
 }
 
 main();
 
-function showBanner(pred)
+function showBanner()
 {
 	if(document.getElementById("phishingBanner")) return;
 

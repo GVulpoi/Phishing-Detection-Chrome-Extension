@@ -79,7 +79,7 @@ chrome.runtime.onInstalled.addListener(() => {
 
 
 //Managing all the messages
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) =>
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) =>
 {
 	//Messages for popup
 	if(message.action === "GET_EXTENSION_STATE")
@@ -109,7 +109,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) =>
 		{
 			console.log("Recieved message without action! Message ignored!");
 			sendResponse({ status: "error"});
-			return;
+			return true;
 		}
 
 		//Processing messages
@@ -120,9 +120,22 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) =>
 				return;
 
 			case "FEATURES_EXTRACTED":
-				const pred = await predict(message.content);
-				console.log(pred ? "This site was evaluated as phishing!" : "This site was evaluated as non-phishing!");
-				sendResponse({result: pred});
+				(async () =>
+				{
+					try
+					{
+						const pred = await predict(message.content);
+						console.log(pred ? "This site was evaluated as phishing!" : "This site was evaluated as non-phishing!");
+						sendResponse({result: pred});
+					}
+					catch (e)
+					{
+						console.error("Eroare la predict:", e);
+						sendResponse({result: null});
+					}
+				}
+				)();
+				
 				return true;
 
 			default:
