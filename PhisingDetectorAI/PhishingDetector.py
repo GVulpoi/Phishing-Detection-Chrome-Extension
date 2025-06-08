@@ -4,8 +4,10 @@ import tensorflowjs as tfjs
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from google.colab import drive
+
 drive.mount('/content/drive')
 df = pd.read_csv("/Phishing_Legitimate_full.csv")
+
 X = df.drop(["id", "CLASS_LABEL","EmbeddedBrandName",
              'ExtFavicon', 'PctNullSelfRedirectHyperlinks',
              'FrequentDomainNameMismatch', 'RightClickDisabled', 'PopUpWindow', 'SubmitInfoToEmail',
